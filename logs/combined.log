@@ -930,3 +930,13 @@ AttributeError: 'super' object has no attribute '__del__'
 [2025-06-13T11:23:27.695Z] ERROR: listen EADDRNOTAVAIL: address not available 66.33.22.65:4000
 [2025-06-13T11:23:36.952Z] ERROR: listen EADDRNOTAVAIL: address not available 66.33.22.65:4000
 [2025-06-13T11:25:02.118Z] INFO: Server running at: http://0.0.0.0:4000
+[2025-06-13T11:25:22.936Z] INFO: [OPTIONS] /api/auth/login
+[2025-06-13T11:25:23.263Z] INFO: [POST] /api/auth/login
+[2025-06-13T11:25:27.339Z] INFO: [OPTIONS] /api/auth/me
+[2025-06-13T11:25:27.346Z] INFO: [GET] /api/auth/me
+[2025-06-13T11:26:40.211Z] INFO: [GET] /api/auth/me
+[2025-06-13T11:26:51.072Z] INFO: [POST] /api/auth/login
+[2025-06-13T11:26:53.669Z] INFO: [GET] /api/auth/me
+[2025-06-13T11:28:15.166Z] INFO: [GET] /api/auth/me
+[2025-06-13T11:28:22.568Z] INFO: [GET] /api/auth/me
+[2025-06-13T11:30:56.852Z] INFO: Server running at: http://0.0.0.0:4000

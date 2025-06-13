@@ -70,10 +70,8 @@ const login = async (payload, h) => {
   .state('token', token, {
     ttl: 3600000,
     isHttpOnly: true,
-    isSecure: false, // ⬅️ false untuk development
     path: '/',
-    sameSite: 'Lax', // ⬅️ gunakan 'Lax' atau 'None' sesuai kebutuhan
-    domain: 'be-production-0885.up.railway.app' // ⛔ opsional, HAPUS jika tidak perlu
+    sameSite: 'none', // ⬅️ gunakan 'Lax' atau 'None' sesuai kebutuhan
   })
   .code(200);
   } catch (err) {
