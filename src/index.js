@@ -18,7 +18,7 @@ const server = Hapi.server({
   host: '0.0.0.0',
   routes: {
     cors: {
-      origin: ['https://front-parent.vercel.app'],
+      origin: ['https://front-parents.vercel.app'],
       credentials: true // ⬅️ WAJIB agar cookie diterima
     }
   }
