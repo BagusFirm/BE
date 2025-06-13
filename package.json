@@ -26,7 +26,9 @@
     "uuid": "^11.1.0",
     "winston": "^3.17.0"
   },
-  "devDependencies": {
-    "nodemon": "^3.0.3"
+  "Dependencies": {
+    "nodemon": "^3.0.3",
+    "jsonwebtoken": "^9.0.0"
   }
+
 }
