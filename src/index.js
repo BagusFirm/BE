@@ -34,6 +34,24 @@ const server = Hapi.server({
 
   // Inisialisasi koneksi DB
   await initDB();
+server.ext('onPreResponse', (request, h) => {
+  const response = request.response;
+  if (response.isBoom || !response.header) return h.continue;
+
+  response.header('Access-Control-Allow-Origin', 'https://front-parent.vercel.app');
+  response.header('Access-Control-Allow-Credentials', 'true');
+  response.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+  response.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+
+  return h.continue;
+});
+server.route({
+  method: 'OPTIONS',
+  path: '/{any*}',
+  handler: (request, h) => {
+    return h.response().code(204);
+  }
+});
 
   // Registrasi routes
   server.route([
