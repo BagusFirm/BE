@@ -42,7 +42,6 @@ const checkAuth = async (request, h) => {
     return h.response({ isLoggedIn: false }).code(200);
   }
 };
-
 const getCurrentUser = async (request, h) => {
   const token = request.state.token;
 
@@ -52,23 +51,28 @@ const getCurrentUser = async (request, h) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const { id } = decoded;
 
     const { data: user, error } = await supabase
       .from('users')
       .select('id, nama_lengkap, email')
-      .eq('id', id)
+      .eq('id', decoded.id)
       .single();
 
     if (error || !user) {
       return h.response({ isLoggedIn: false, user: null }).code(200);
     }
 
-    return h.response({ isLoggedIn: true, user }).code(200);
+    return h.response({
+      isLoggedIn: true,
+      user,
+    }).code(200);
+
   } catch (err) {
     return h.response({ isLoggedIn: false, user: null }).code(200);
   }
 };
+
+
 
 const forgotPassword = async (request, h) => {
   const payload = request.payload;
