@@ -940,3 +940,11 @@ AttributeError: 'super' object has no attribute '__del__'
 [2025-06-13T11:28:15.166Z] INFO: [GET] /api/auth/me
 [2025-06-13T11:28:22.568Z] INFO: [GET] /api/auth/me
 [2025-06-13T11:30:56.852Z] INFO: Server running at: http://0.0.0.0:4000
+[2025-06-13T11:32:54.778Z] INFO: Server running at: http://0.0.0.0:4000
+[2025-06-13T11:33:36.295Z] INFO: [POST] /api/auth/login
+[2025-06-13T11:34:13.790Z] INFO: [OPTIONS] /api/parentmatch
+[2025-06-13T11:34:13.795Z] INFO: [POST] /api/parentmatch
+[2025-06-13T11:41:48.984Z] INFO: [POST] /api/auth/login
+[2025-06-13T11:41:49.748Z] INFO: [POST] /api/auth/login
+[2025-06-13T11:43:27.482Z] INFO: [OPTIONS] /api/auth/login
+[2025-06-13T11:43:45.744Z] INFO: Server running at: http://0.0.0.0:4000
