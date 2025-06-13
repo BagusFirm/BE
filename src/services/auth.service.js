@@ -73,7 +73,7 @@ const login = async (payload, h) => {
     isSecure: false, // ⬅️ false untuk development
     path: '/',
     sameSite: 'Lax', // ⬅️ gunakan 'Lax' atau 'None' sesuai kebutuhan
-    domain: 'localhost' // ⛔ opsional, HAPUS jika tidak perlu
+    domain: 'be-production-0885.up.railway.app' // ⛔ opsional, HAPUS jika tidak perlu
   })
   .code(200);
   } catch (err) {

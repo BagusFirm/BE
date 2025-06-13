@@ -15,7 +15,7 @@ const init = async () => {
 
 const server = Hapi.server({
   port: 4000,
-  host: 'be-production-0885.up.railway.app',
+  host: '0.0.0.0',
   routes: {
     cors: {
       origin: ['https://front-parent.vercel.app'], // ⬅️ sesuaikan dengan frontend
