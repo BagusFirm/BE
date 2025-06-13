@@ -924,3 +924,6 @@ AttributeError: 'super' object has no attribute '__del__'
 [2025-06-13T11:15:02.688Z] INFO: [GET] /api/auth/me
 [2025-06-13T11:15:12.399Z] INFO: [OPTIONS] /api/auth/login
 [2025-06-13T11:15:53.632Z] INFO: [OPTIONS] /api/auth/login
+[2025-06-13T11:17:55.745Z] INFO: [OPTIONS] /api/auth/login
+[2025-06-13T11:18:21.453Z] INFO: [OPTIONS] /api/auth/login
+[2025-06-13T11:19:55.154Z] ERROR: listen EADDRNOTAVAIL: address not available 66.33.22.65:4000
