@@ -15,14 +15,16 @@ const init = async () => {
 
 const server = Hapi.server({
   port: 4000,
-  host: '0.0.0.0',
+  host: 'localhost',
   routes: {
     cors: {
-      origin: ['https://front-parent.vercel.app'], // ⬅️ sesuaikan dengan frontend
+      origin: ['http://localhost:3000'], // ⬅️ sesuaikan dengan frontend
       credentials: true // ⬅️ WAJIB agar cookie diterima
     }
   }
 });
+
+
 
   // Logging saat server mulai
   server.ext('onRequest', (request, h) => {
@@ -32,6 +34,7 @@ const server = Hapi.server({
 
   // Inisialisasi koneksi DB
   await initDB();
+
   // Registrasi routes
   server.route([
     ...forumRoutes,
