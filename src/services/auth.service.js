@@ -70,11 +70,10 @@ const login = async (payload, h) => {
   .state('token', token, {
     ttl: 3600000,
     isHttpOnly: true,
-    isSecure: false, // ⬅️ false untuk development
+    isSecure: true, // ⬅️ false untuk development
     path: '/',
-    sameSite: 'Lax', // ⬅️ gunakan 'Lax' atau 'None' sesuai kebutuhan
-    domain: 'localhost' // ⛔ opsional, HAPUS jika tidak perlu
-  })
+    sameSite: 'none', // ⬅️ gunakan 'Lax' atau 'None' sesuai kebutuhan
+   })
   .code(200);
   } catch (err) {
     console.error('🔥 Login Error:', err.message);

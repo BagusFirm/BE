@@ -15,10 +15,10 @@ const init = async () => {
 
 const server = Hapi.server({
   port: 4000,
-  host: 'localhost',
+  host: '0.0.0.0',
   routes: {
     cors: {
-      origin: ['http://localhost:3000'], // ⬅️ sesuaikan dengan frontend
+      origin: ['https://front-parent.vercel.app'],
       credentials: true // ⬅️ WAJIB agar cookie diterima
     }
   }

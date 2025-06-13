@@ -907,3 +907,29 @@ AttributeError: 'super' object has no attribute '__del__'
 [2025-06-13T06:15:40.242Z] INFO: [PUT] /api/auth/me
 [2025-06-13T06:15:45.437Z] INFO: [GET] /api/auth/me
 [2025-06-13T06:15:45.781Z] INFO: [GET] /api/auth/me
+[2025-06-13T13:36:45.200Z] INFO: Server running at: http://localhost:4000
+[2025-06-13T13:37:11.319Z] INFO: [GET] /api/auth/me
+[2025-06-13T13:37:11.403Z] INFO: [GET] /api/auth/me
+[2025-06-13T13:37:23.415Z] INFO: [OPTIONS] /api/auth/login
+[2025-06-13T13:37:23.422Z] INFO: [POST] /api/auth/login
+[2025-06-13T13:37:27.066Z] INFO: [GET] /api/auth/me
+[2025-06-13T13:37:27.168Z] INFO: [GET] /api/auth/me
+[2025-06-13T13:37:48.262Z] INFO: [GET] /api/auth/me
+[2025-06-13T13:37:48.911Z] INFO: [GET] /api/auth/me
+[2025-06-13T13:37:48.920Z] INFO: [GET] /api/forum
+[2025-06-13T13:37:49.383Z] INFO: [GET] /api/forum
+[2025-06-13T13:37:57.471Z] INFO: [OPTIONS] /api/forum
+[2025-06-13T13:37:57.477Z] INFO: [POST] /api/forum
+[2025-06-13T13:37:57.879Z] INFO: [GET] /api/forum
+[2025-06-13T13:38:08.207Z] INFO: [OPTIONS] /api/forum/44566798-cdcb-42c0-b008-d8517351b2c3/answer
+[2025-06-13T13:38:08.213Z] INFO: [POST] /api/forum/44566798-cdcb-42c0-b008-d8517351b2c3/answer
+[2025-06-13T13:38:08.602Z] INFO: [GET] /api/forum
+[2025-06-13T13:38:37.912Z] INFO: [OPTIONS] /api/parentmatch
+[2025-06-13T13:38:37.915Z] INFO: [POST] /api/parentmatch
+[2025-06-13T13:39:01.460Z] INFO: [GET] /api/auth/me
+[2025-06-13T13:39:02.347Z] INFO: [GET] /api/auth/me
+[2025-06-13T13:39:08.101Z] INFO: [OPTIONS] /api/auth/me
+[2025-06-13T13:39:08.104Z] INFO: [PUT] /api/auth/me
+[2025-06-13T13:39:13.007Z] INFO: [GET] /api/auth/me
+[2025-06-13T13:39:13.258Z] INFO: [GET] /api/auth/me
+[2025-06-13T13:42:25.659Z] INFO: Server running at: http://localhost:4000
