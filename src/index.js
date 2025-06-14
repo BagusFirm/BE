@@ -16,7 +16,8 @@ const server = Hapi.server({
   routes: {
     cors: {
       origin: ['https://front-parent.vercel.app'],
-      credentials: true // ⬅️ WAJIB agar cookie diterima
+      credentials: true, // ⬅️ WAJIB agar cookie diterima
+      additionalHeaders: ['cache-control', 'x-requested-with']
     }
   }
 });
@@ -44,7 +45,16 @@ const server = Hapi.server({
     }
   }
   ]);
-   
+  server.ext('onPreResponse', (request, h) => {
+  const response = request.response;
+  if (response.isBoom) return h.continue;
+
+  response.header('Access-Control-Allow-Origin', 'https://front-parent.vercel.app');
+  response.header('Access-Control-Allow-Credentials', 'true');
+  response.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  return h.continue;
+});
+
   // Start server
   await server.start();
   console.log(`🚀 Server running at: ${server.info.uri}`);
