@@ -35,8 +35,16 @@ const server = Hapi.server({
     ...forumRoutes,
     ...parentMatchRoutes,
     ...authRoutes,
+  
+    {
+    method: 'OPTIONS',
+    path: '/{any*}',
+    handler: (request, h) => {
+      return h.response().code(200);
+    }
+  }
   ]);
-
+   
   // Start server
   await server.start();
   console.log(`🚀 Server running at: ${server.info.uri}`);
