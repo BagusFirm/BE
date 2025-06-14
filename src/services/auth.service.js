@@ -81,8 +81,8 @@ console.log('🔥 Cookie Setting:', {
   .state('token', token, {
     ttl: 3600000,
     isHttpOnly: true,
-    isSecure: process.env.NODE_ENV === 'production',
-    sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
+    isSecure: true,
+    sameSite: 'None',
     path: '/',
   })
   .code(200);
