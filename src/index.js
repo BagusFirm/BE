@@ -8,25 +8,20 @@ const parentMatchRoutes = require('./routes/parentmatch.routes');
 const authRoutes = require('./routes/auth.routes');
 const { initDB } = require('./config/db');
 
-
 const init = async () => {
   // Inisialisasi server
- // In your server initialization code (probably where you create the Hapi server)
+  const server = Hapi.server({
+    port: process.env.PORT || 4000,
+    host: process.env.HOST || '0.0.0.0',  // Pastikan HOST ada di .env jika diperlukan
+    routes: {
+      cors: {
+        origin: ['https://front-parents.vercel.app'],  // Ganti dengan domain frontend kamu
+        credentials: true,  // WAJIB untuk mengirim cookie
+      },
+    },
+  });
 
-const server = Hapi.server({
-  port: process.env.PORT || 4000,
-  host: '0.0.0.0',
-  routes: {
-    cors: {
-      origin: ['https://front-parents.vercel.app'],
-      credentials: true // ⬅️ WAJIB agar cookie diterima
-    }
-  }
-});
-
-
-
-  // Logging saat server mulai
+  // Logging setiap request
   server.ext('onRequest', (request, h) => {
     winston.info(`[${request.method.toUpperCase()}] ${request.path}`);
     return h.continue;
@@ -51,6 +46,11 @@ const server = Hapi.server({
 // Global error handler
 process.on('unhandledRejection', (err) => {
   winston.error(err);
+  process.exit(1);
+});
+
+process.on('uncaughtException', (err) => {
+  winston.error('Uncaught Exception: ', err);
   process.exit(1);
 });
 
