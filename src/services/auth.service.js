@@ -79,7 +79,7 @@ const login = async (payload, h) => {
     isHttpOnly: true,
     isSecure: true,
     path: '/',
-    sameSite: 'none',
+    sameSite: 'None',
   })
   .code(200);
   } catch (err) {
