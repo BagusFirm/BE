@@ -8,11 +8,8 @@ const parentMatchRoutes = require('./routes/parentmatch.routes');
 const authRoutes = require('./routes/auth.routes');
 const { initDB } = require('./config/db');
 
-
 const init = async () => {
   // Inisialisasi server
- // In your server initialization code (probably where you create the Hapi server)
-
 const server = Hapi.server({
   port: process.env.PORT || 4000,
   host: '0.0.0.0',
@@ -24,9 +21,7 @@ const server = Hapi.server({
   }
 });
 
-
-
-  // Logging saat server mulai
+  // Logging setiap request
   server.ext('onRequest', (request, h) => {
     winston.info(`[${request.method.toUpperCase()}] ${request.path}`);
     return h.continue;
@@ -51,6 +46,11 @@ const server = Hapi.server({
 // Global error handler
 process.on('unhandledRejection', (err) => {
   winston.error(err);
+  process.exit(1);
+});
+
+process.on('uncaughtException', (err) => {
+  winston.error('Uncaught Exception: ', err);
   process.exit(1);
 });
 
