@@ -77,9 +77,9 @@ const login = async (payload, h) => {
   .state('token', token, {
     ttl: 3600000,
     isHttpOnly: true,
-    isSecure: true,
+    isSecure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax',
     path: '/',
-    sameSite: 'None',
   })
   .code(200);
   } catch (err) {
