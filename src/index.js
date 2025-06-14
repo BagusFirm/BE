@@ -10,16 +10,18 @@ const { initDB } = require('./config/db');
 
 const init = async () => {
   // Inisialisasi server
-  const server = Hapi.server({
-    port: process.env.PORT || 4000,
-    host: process.env.HOST || '0.0.0.0',  // Pastikan HOST ada di .env jika diperlukan
-    routes: {
-      cors: {
-        origin: ['https://front-parents.vercel.app'],  // Ganti dengan domain frontend kamu
-        credentials: true,  // WAJIB untuk mengirim cookie
-      },
+const server = Hapi.server({
+  port: process.env.PORT || 4000,
+  host: '0.0.0.0',
+  routes: {
+    cors: {
+      origin: ['https://front-parent.vercel.app'],  // Domain yang diizinkan
+      credentials: true, // Untuk mengizinkan cookies atau kredensial lainnya
+      headers: ['Content-Type', 'Authorization'],  // Pastikan ini mencakup header yang diperlukan
+      methods: ['GET', 'POST', 'PUT', 'DELETE'], // Daftar metode yang diizinkan
     },
-  });
+  },
+});
 
   // Logging setiap request
   server.ext('onRequest', (request, h) => {
