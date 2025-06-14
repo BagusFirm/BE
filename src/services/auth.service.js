@@ -65,15 +65,23 @@ const login = async (payload, h) => {
     );
 
     // ✅ Set cookie sebagai HttpOnly
-     return h
-  .response({ message: 'Login sukses' })
+  return h
+  .response({
+    message: 'Login sukses',
+    token, // ⬅️ ini yang frontend butuh
+    user: {
+      id: user.id,
+      nama_lengkap: user.nama_lengkap,
+      email: user.email
+    }
+  })
   .state('token', token, {
     ttl: 3600000,
     isHttpOnly: true,
-    isSecure: true, // ⬅️ false untuk development
+    isSecure: true,
     path: '/',
-    sameSite: 'none', // ⬅️ gunakan 'Lax' atau 'None' sesuai kebutuhan
-   })
+    sameSite: 'none',
+  })
   .code(200);
   } catch (err) {
     console.error('🔥 Login Error:', err.message);
