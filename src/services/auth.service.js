@@ -82,7 +82,7 @@ console.log('🔥 Cookie Setting:', {
     ttl: 3600000,
     isHttpOnly: true,
     isSecure: true,
-    sameSite: 'None',
+    isSameSite: 'None',   
     path: '/',
   })
   .code(200);
