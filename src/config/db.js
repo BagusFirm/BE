@@ -16,14 +16,18 @@ function getDB() {
 
 async function initDB() {
   try {
+    console.log('🚀 Menghubungkan ke Supabase...');
     const { data, error } = await supabase.from('forum_posts').select().limit(1);
+    
     if (error) throw error;
-    console.log('✅ Koneksi Supabase berhasil');
+
+    console.log('✅ Koneksi Supabase berhasil. Data dummy:', data);
   } catch (err) {
     console.error('❌ Gagal koneksi ke Supabase:', err.message);
     throw err;
   }
 }
+
 
 module.exports = {
   getDB,
