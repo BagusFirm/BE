@@ -19,13 +19,6 @@ if (!PORT) {
 const server = Hapi.server({
   port: PORT, // JANGAN kasih default ke 4000
   host: '0.0.0.0',
-  routes: {
-    cors: {
-      origin: ['*'],
-      credentials: true,
-      additionalHeaders: ['cache-control', 'x-requested-with']
-    }
-  }
 });
 
 

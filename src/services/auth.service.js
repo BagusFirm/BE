@@ -65,20 +65,18 @@ const login = async (payload, h) => {
     );
 
     // ✅ Set cookie sebagai HttpOnly
-  return h
-  .response({
-    message: 'Login sukses',
-    token, // ⬅️ ini yang frontend butuh
-    user: {
-      id: user.id,
-      nama_lengkap: user.nama_lengkap,
-      email: user.email
-    }
-  })
+  return h.response({
+  status: 'success',
+  message: 'Login sukses',
+  data: {
+    user,
+    token
+  }
+})
   .state('token', token, {
     ttl: 3600000,
     isHttpOnly: true,
-    isSecure: true,
+    isSecure: process.env.NODE_ENV === 'production',
     path: '/',
     sameSite: 'none',
   })
