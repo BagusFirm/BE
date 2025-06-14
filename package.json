@@ -20,6 +20,7 @@
     "@hapi/hapi": "^21.3.1",
     "@supabase/supabase-js": "^2.39.5",
     "axios": "^1.6.8",
+    "bcryptjs": "^3.0.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "jsonwebtoken": "^9.0.2",
