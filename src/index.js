@@ -52,23 +52,26 @@ const server = Hapi.server({
 }]);
   // Global CORS handler (termantap)
 server.ext('onPreResponse', (request, h) => {
+  const response = request.response;
+
+  // Tambahkan CORS headers secara manual
   const headers = {
     'Access-Control-Allow-Origin': 'https://front-parent.vercel.app',
     'Access-Control-Allow-Credentials': 'true',
-    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-    'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+    'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
   };
 
-  // Tangani jika error (Boom object)
-  if (request.response.isBoom) {
-    const boomResponse = request.response.output;
-    return h.response(boomResponse.payload)
-      .code(boomResponse.statusCode)
-      .headers(headers);
+  // Jika response adalah error (Boom)
+  if (response.isBoom) {
+    Object.entries(headers).forEach(([key, value]) => {
+      response.output.headers[key] = value;
+    });
+    return h.continue;
   }
 
-  // Jika normal response
-  const response = request.response;
+  winston.info(`🔧 CORS headers added for ${request.path}`);
+
+  // Untuk response biasa
   Object.entries(headers).forEach(([key, value]) => {
     response.header(key, value);
   });
