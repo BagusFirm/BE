@@ -37,14 +37,19 @@ const server = Hapi.server({
     ...parentMatchRoutes,
     ...authRoutes,
   
-    {
-    method: 'OPTIONS',
-    path: '/{any*}',
-    handler: (request, h) => {
-      return h.response().code(200);
-    }
+   {
+  method: 'OPTIONS',
+  path: '/{any*}',
+  handler: (request, h) => {
+    return h
+      .response('OK')
+      .code(200)
+      .header('Access-Control-Allow-Origin', 'https://front-parent.vercel.app')
+      .header('Access-Control-Allow-Credentials', 'true')
+      .header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+      .header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
   }
-  ]);
+}]);
   server.ext('onPreResponse', (request, h) => {
   const response = request.response;
   if (response.isBoom) return h.continue;
