@@ -16,7 +16,7 @@ const init = async () => {
       host: '0.0.0.0',
       routes: {
         cors: {
-          origin: ['https://front-parent.vercel.app'],
+          origin: ['*'],
           credentials: true,
           additionalHeaders: ['cache-control', 'x-requested-with']
         }
