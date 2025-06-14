@@ -50,15 +50,34 @@ const server = Hapi.server({
       .header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
   }
 }]);
-  server.ext('onPreResponse', (request, h) => {
+  // Global CORS handler (termantap)
+server.ext('onPreResponse', (request, h) => {
   const response = request.response;
-  if (response.isBoom) return h.continue;
 
-  response.header('Access-Control-Allow-Origin', 'https://front-parent.vercel.app');
-  response.header('Access-Control-Allow-Credentials', 'true');
-  response.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  // Allow CORS for any response (success or error)
+  const headers = {
+    'Access-Control-Allow-Origin': 'https://front-parent.vercel.app',
+    'Access-Control-Allow-Credentials': 'true',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+  };
+
+  if (response.isBoom) {
+    // Tangani error juga, biar header tetap dikirim
+    return h
+      .response(response.output.payload)
+      .code(response.output.statusCode)
+      .headers(headers);
+  }
+
+  // Tambah header ke response biasa
+  Object.entries(headers).forEach(([key, value]) => {
+    response.header(key, value);
+  });
+
   return h.continue;
 });
+
 
   // Start server
   await server.start();
