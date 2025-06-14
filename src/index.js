@@ -15,13 +15,14 @@ const server = Hapi.server({
   host: '0.0.0.0',
   routes: {
     cors: {
-      origin: ['https://front-parent.vercel.app'],  // Domain yang diizinkan
-      credentials: true, // Untuk mengizinkan cookies atau kredensial lainnya
-      headers: ['Content-Type', 'Authorization'],  // Pastikan ini mencakup header yang diperlukan
-      methods: ['GET', 'POST', 'PUT', 'DELETE'], // Daftar metode yang diizinkan
+      origin: ['https://front-parent.vercel.app'], // Pastikan ini adalah domain frontend yang benar
+      credentials: true, // Jika menggunakan cookies atau kredensial lainnya
+      methods: ['GET', 'POST', 'PUT', 'DELETE'], // Pastikan metode yang dibutuhkan diizinkan
+      allowedHeaders: ['Content-Type', 'Authorization'], // Pastikan header yang diperlukan disertakan
     },
   },
 });
+
 
   // Logging setiap request
   server.ext('onRequest', (request, h) => {
