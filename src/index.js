@@ -31,9 +31,21 @@ const init = async () => {
     await initDB();
 
     server.route([
+      // ✅ Root route buat health check (fix error 502)
+      {
+        method: 'GET',
+        path: '/',
+        handler: (request, h) => {
+          return h.response({ status: 'ok', message: 'ParentCare Backend is alive!' });
+        }
+      },
+
+      // ✅ Semua route utama
       ...forumRoutes,
       ...parentMatchRoutes,
       ...authRoutes,
+
+      // ✅ OPTIONS route untuk preflight CORS
       {
         method: 'OPTIONS',
         path: '/{any*}',
@@ -49,9 +61,9 @@ const init = async () => {
       }
     ]);
 
+    // ✅ Tambahkan CORS headers ke semua response
     server.ext('onPreResponse', (request, h) => {
       const response = request.response;
-
       const corsHeaders = {
         'Access-Control-Allow-Origin': 'https://front-parent.vercel.app',
         'Access-Control-Allow-Credentials': 'true',
