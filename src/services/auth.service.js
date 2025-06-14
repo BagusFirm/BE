@@ -68,6 +68,7 @@ const login = async (payload, h) => {
   return h.response({
   status: 'success',
   message: 'Login sukses',
+  token,
   data: {
     user,
     token
