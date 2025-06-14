@@ -63,7 +63,11 @@ const login = async (payload, h) => {
       process.env.JWT_SECRET,
       { expiresIn: '1h' }
     );
-
+    console.log('🔥 ENV:', process.env.NODE_ENV);
+console.log('🔥 Cookie Setting:', {
+  isSecure: process.env.NODE_ENV === 'production',
+  sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Lax'
+});
     // ✅ Set cookie sebagai HttpOnly
   return h.response({
   status: 'success',

@@ -68,6 +68,8 @@ const server = Hapi.server({
     // ✅ Tambahkan CORS headers ke semua response
     server.ext('onPreResponse', (request, h) => {
       const response = request.response;
+      const cookies = response.headers?.['set-cookie'] || response.output?.headers?.['set-cookie'];
+  console.log('🍪 Set-Cookie Headers:', cookies);
       const corsHeaders = {
         'Access-Control-Allow-Origin': 'https://front-parent.vercel.app',
         'Access-Control-Allow-Credentials': 'true',
