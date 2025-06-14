@@ -10,18 +10,24 @@ const authRoutes = require('./routes/auth.routes');
 const init = async () => {
   try {
     console.log("🚀 Starting ParentCare backend...");
+const PORT = process.env.PORT;
 
-    const server = Hapi.server({
-      port: process.env.PORT || 4000,
-      host: '0.0.0.0',
-      routes: {
-        cors: {
-          origin: ['*'],
-          credentials: true,
-          additionalHeaders: ['cache-control', 'x-requested-with']
-        }
-      }
-    });
+if (!PORT) {
+  throw new Error("🚨 Environment variable PORT belum tersedia. Railway membutuhkan ini!");
+}
+
+const server = Hapi.server({
+  port: PORT, // JANGAN kasih default ke 4000
+  host: '0.0.0.0',
+  routes: {
+    cors: {
+      origin: ['*'],
+      credentials: true,
+      additionalHeaders: ['cache-control', 'x-requested-with']
+    }
+  }
+});
+
 
     server.ext('onRequest', (request, h) => {
       winston.info(`[REQ] ${request.method.toUpperCase()} ${request.path}`);
