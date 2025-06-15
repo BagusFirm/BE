@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
 const { getDB } = require('../config/db');
 const supabase = getDB();
+const path = require('path');
+const fs = require('fs'); // Ini juga kamu butuh buat `fs.createWriteStream` dan `fs.existsSync`
 
 const AuthService = require('../services/auth.service');
 
@@ -97,8 +99,6 @@ const updateProfile = async (request, h) => {
   try {
     const token = request.state.token;
     console.log('[UPDATE PROFILE] Token:', token);
-    const path = require('path');
-    const fs = require('fs'); // Ini juga kamu butuh buat `fs.createWriteStream` dan `fs.existsSync`
 
     if (!token) {
       return h.response({ message: 'Token tidak ditemukan' }).code(401);
