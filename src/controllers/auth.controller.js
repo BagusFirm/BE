@@ -168,7 +168,7 @@ const uploadAvatar = async (request, h) => {
 
     // Buat URL publik (misal: http://localhost:3000/uploads/avatars/...)
     const publicUrl = `/uploads/avatars/${fileName}`;
-
+    console.log('[UPLOAD AVATAR] Public URL:', fullUrl);
     const { data: user, error: updateError } = await supabase
       .from('users')
       .update({ avatar: publicUrl })
