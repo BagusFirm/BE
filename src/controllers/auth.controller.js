@@ -137,6 +137,63 @@ const updateProfile = async (request, h) => {
   }
 };
 
+const uploadAvatar = async (request, h) => {
+  try {
+    const token = request.state.token;
+    if (!token) return h.response({ message: 'Token tidak ditemukan' }).code(401);
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.id;
+
+    const file = request.payload.avatar;
+    if (!file || !file.hapi) return h.response({ message: 'File tidak valid' }).code(400);
+
+    const ext = path.extname(file.hapi.filename);
+    const mimeType = file.hapi.headers['content-type'];
+    const filePath = `avatars/${userId}_${Date.now()}${ext}`;
+
+    const chunks = [];
+    for await (const chunk of file) {
+      chunks.push(chunk);
+    }
+    const buffer = Buffer.concat(chunks);
+
+    const { error: uploadError } = await supabaseClient.storage
+      .from('avatars')
+      .upload(filePath, buffer, {
+        contentType: mimeType,
+        upsert: true
+      });
+
+    if (uploadError) {
+      console.error('Upload error:', uploadError);
+      return h.response({ message: 'Gagal upload avatar' }).code(500);
+    }
+
+    const { data: { publicUrl } } = supabaseClient
+      .storage
+      .from('avatars')
+      .getPublicUrl(filePath);
+
+    const { data: user, error: updateError } = await supabase
+      .from('users')
+      .update({ avatar: publicUrl })
+      .eq('id', userId)
+      .select('id, nama_lengkap, email, avatar')
+      .single();
+
+    if (updateError) {
+      console.error('Update avatar URL error:', updateError);
+      return h.response({ message: 'Gagal simpan URL avatar' }).code(500);
+    }
+
+    return h.response({ message: 'Avatar berhasil diperbarui', user }).code(200);
+  } catch (err) {
+    console.error('[UPLOAD AVATAR ERROR]', err.message);
+    return h.response({ message: 'Terjadi kesalahan saat upload avatar' }).code(500);
+  }
+};
+
 module.exports = {
   register,
   login,
@@ -144,5 +201,6 @@ module.exports = {
   logout,
   checkAuth,
   getCurrentUser,
-  updateProfile
+  updateProfile,
+  uploadAvatar
 };

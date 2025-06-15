@@ -31,10 +31,22 @@ module.exports = [
     path: '/api/auth/logout',
     handler: AuthController.logout
   },
-  
   {
   method: 'PUT',
   path: '/api/auth/me',
   handler: AuthController.updateProfile
+},
+{
+  method: 'POST',
+  path: '/api/auth/upload-avatar',
+  options: {
+    payload: {
+      output: 'stream',
+      parse: true,
+      allow: 'multipart/form-data',
+      maxBytes: 1024 * 1024 * 3
+    }
+  },
+  handler: AuthController.uploadAvatar
 }
 ];
