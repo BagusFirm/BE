@@ -73,7 +73,7 @@ const server = Hapi.server({
   path: '/uploads/{param*}',
   handler: {
     directory: {
-      path: Path.join(__dirname, 'public', 'uploads'),
+      path: path.join(__dirname, 'public', 'uploads'),
       listing: false,
       index: false
     }
