@@ -2,6 +2,8 @@ require('dotenv').config();
 const Hapi = require('@hapi/hapi');
 const winston = require('./utils/logger');
 const { initDB } = require('./config/db');
+const Path = require('path');
+const Inert = require('@hapi/inert');
 
 const forumRoutes = require('./routes/forum.routes');
 const parentMatchRoutes = require('./routes/parentmatch.routes');
@@ -33,6 +35,7 @@ const server = Hapi.server({
     });
 
     await initDB();
+    await server.register(Inert);
 
     server.route([
       // ✅ Root route buat health check (fix error 502)
@@ -64,6 +67,18 @@ const server = Hapi.server({
         }
       }
     ]);
+
+    server.route({
+  method: 'GET',
+  path: '/uploads/{param*}',
+  handler: {
+    directory: {
+      path: Path.join(__dirname, 'public', 'uploads'),
+      listing: false,
+      index: false
+    }
+  }
+});
 
     // ✅ Tambahkan CORS headers ke semua response
     server.ext('onPreResponse', (request, h) => {

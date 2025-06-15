@@ -144,38 +144,28 @@ const uploadAvatar = async (request, h) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.id;
-    console.log('[DEBUG] Content-Type:', request.headers['content-type']);
-console.log('[DEBUG] Payload:', request.payload);
-
     const file = request.payload.avatar;
+
     if (!file || !file.hapi) return h.response({ message: 'File tidak valid' }).code(400);
-    const path = require('path');
-    const ext = path.extname(file.hapi.filename);
-    const mimeType = file.hapi.headers['content-type'];
-    const filePath = `avatars/${userId}_${Date.now()}${ext}`;
 
-    const chunks = [];
-    for await (const chunk of file) {
-      chunks.push(chunk);
-    }
-    const buffer = Buffer.concat(chunks);
+    // Folder tujuan (pastikan folder ini ada dan bisa diakses)
+    const uploadDir = path.join(__dirname, '..', '..', 'public', 'uploads', 'avatars');
+    if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 
-    const { error: uploadError } = await supabase.storage
-      .from('avatars')
-      .upload(filePath, buffer, {
-        contentType: mimeType,
-        upsert: true
-      });
+    // Simpan file ke folder
+    const fileExt = path.extname(file.hapi.filename);
+    const fileName = `${userId}_${Date.now()}${fileExt}`;
+    const filePath = path.join(uploadDir, fileName);
 
-    if (uploadError) {
-      console.error('Upload error:', uploadError);
-      return h.response({ message: 'Gagal upload avatar' }).code(500);
-    }
+    const fileStream = fs.createWriteStream(filePath);
+    await new Promise((resolve, reject) => {
+      file.pipe(fileStream);
+      file.on('end', resolve);
+      file.on('error', reject);
+    });
 
-    const { data: { publicUrl } } = supabase
-      .storage
-      .from('avatars')
-      .getPublicUrl(filePath);
+    // Buat URL publik (misal: http://localhost:3000/uploads/avatars/...)
+    const publicUrl = `/uploads/avatars/${fileName}`;
 
     const { data: user, error: updateError } = await supabase
       .from('users')
