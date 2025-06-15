@@ -43,7 +43,7 @@ module.exports = [
     payload: {
       output: 'stream',
       parse: true,
-      allow: 'multipart/form-data',
+      allow: ['multipart/form-data'],
       maxBytes: 1024 * 1024 * 3
     }
   },
