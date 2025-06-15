@@ -144,6 +144,7 @@ const uploadAvatar = async (request, h) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.id;
+    console.log('[UPLOAD AVATAR] Payload:', request.payload);
 
     const file = request.payload.avatar;
     if (!file || !file.hapi) return h.response({ message: 'File tidak valid' }).code(400);
