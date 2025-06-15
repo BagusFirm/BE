@@ -2,7 +2,10 @@ require('dotenv').config();
 const Hapi = require('@hapi/hapi');
 const winston = require('./utils/logger');
 const { initDB } = require('./config/db');
+
+const fs = require('fs');
 const path = require('path');
+
 const Inert = require('@hapi/inert');
 
 const forumRoutes = require('./routes/forum.routes');
@@ -82,6 +85,20 @@ const server = Hapi.server({
     }
   }
 });
+server.route({
+  method: 'GET',
+  path: '/debug/uploads',
+  handler: (request, h) => {
+    const uploadPath = path.join(__dirname, 'public', 'uploads', 'avatars');
+    if (!fs.existsSync(uploadPath)) {
+      return h.response({ error: 'Folder not found' }).code(404);
+    }
+
+    const files = fs.readdirSync(uploadPath);
+    return h.response({ files });
+  }
+});
+
 
     // ✅ Tambahkan CORS headers ke semua response
     server.ext('onPreResponse', (request, h) => {
