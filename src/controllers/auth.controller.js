@@ -150,11 +150,9 @@ const uploadAvatar = async (request, h) => {
 
     if (!file || !file.hapi) return h.response({ message: 'File tidak valid' }).code(400);
 
-    // Folder tujuan (pastikan folder ini ada dan bisa diakses)
-    const uploadDir = path.join(__dirname, '..', '..', 'public', 'uploads', 'avatars');
+    const uploadDir = getPublicPath('uploads', 'avatars');
     if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 
-    // Simpan file ke folder
     const fileExt = path.extname(file.hapi.filename);
     const fileName = `${userId}_${Date.now()}${fileExt}`;
     const filePath = path.join(uploadDir, fileName);
@@ -166,11 +164,12 @@ const uploadAvatar = async (request, h) => {
       file.on('error', reject);
     });
 
-    // Buat URL publik (misal: http://localhost:3000/uploads/avatars/...)
     const publicUrl = `/uploads/avatars/${fileName}`;
     const fullUrl = `${process.env.BASE_URL || 'https://be-production-0885.up.railway.app'}${publicUrl}`;
-    console.log('📁 Simpan file ke:', path.join(__dirname, 'public', 'uploads', 'avatars', fileName));
+
+    console.log('📁 Simpan file ke:', filePath);
     console.log('[UPLOAD AVATAR] Public URL:', fullUrl);
+
     const { data: user, error: updateError } = await supabase
       .from('users')
       .update({ avatar: publicUrl })
@@ -179,7 +178,6 @@ const uploadAvatar = async (request, h) => {
       .single();
 
     if (updateError) {
-      console.error('Update avatar URL error:', updateError);
       return h.response({ message: 'Gagal simpan URL avatar' }).code(500);
     }
 

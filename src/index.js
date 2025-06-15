@@ -15,25 +15,24 @@ const authRoutes = require('./routes/auth.routes');
 const init = async () => {
   try {
     console.log("🚀 Starting ParentCare backend...");
-const PORT = process.env.PORT;
+    const PORT = process.env.PORT;
 
-if (!PORT) {
-  throw new Error("🚨 Environment variable PORT belum tersedia. Railway membutuhkan ini!");
-}
-
-const server = Hapi.server({
-  port: PORT, // JANGAN kasih default ke 4000
-  host: '0.0.0.0',
-  routes: {
-    cors: {
-      credentials: true,
-    },
-    files: {
-      relativeTo: path.join(__dirname, 'public') // 💥 ini dia yang bikin static file bisa jalan!
+    if (!PORT) {
+      throw new Error("🚨 Environment variable PORT belum tersedia. Railway membutuhkan ini!");
     }
-  }
-});
 
+    const server = Hapi.server({
+      port: PORT,
+      host: '0.0.0.0',
+      routes: {
+        cors: {
+          credentials: true,
+        },
+        files: {
+          relativeTo: path.join(__dirname, 'public')
+        }
+      }
+    });
 
     server.ext('onRequest', (request, h) => {
       winston.info(`[REQ] ${request.method.toUpperCase()} ${request.path}`);
@@ -44,7 +43,6 @@ const server = Hapi.server({
     await server.register(Inert);
 
     server.route([
-      // ✅ Root route buat health check (fix error 502)
       {
         method: 'GET',
         path: '/',
@@ -52,13 +50,9 @@ const server = Hapi.server({
           return h.response({ status: 'ok', message: 'ParentCare Backend is alive!' });
         }
       },
-
-      // ✅ Semua route utama
       ...forumRoutes,
       ...parentMatchRoutes,
       ...authRoutes,
-
-      // ✅ OPTIONS route untuk preflight CORS
       {
         method: 'OPTIONS',
         path: '/{any*}',
@@ -75,36 +69,36 @@ const server = Hapi.server({
     ]);
 
     server.route({
-  method: 'GET',
-  path: '/uploads/{param*}',
-  handler: {
-    directory: {
-      path: path.join(__dirname, 'public', 'uploads'),
-      listing: false,
-      index: false
-    }
-  }
-});
-server.route({
-  method: 'GET',
-  path: '/debug/uploads',
-  handler: (request, h) => {
-    const uploadPath = path.join(__dirname, 'public', 'uploads', 'avatars');
-    if (!fs.existsSync(uploadPath)) {
-      return h.response({ error: 'Folder not found' }).code(404);
-    }
+      method: 'GET',
+      path: '/uploads/{param*}',
+      handler: {
+        directory: {
+          path: 'uploads',
+          listing: false,
+          index: false
+        }
+      }
+    });
 
-    const files = fs.readdirSync(uploadPath);
-    return h.response({ files });
-  }
-});
+    server.route({
+      method: 'GET',
+      path: '/debug/uploads',
+      handler: (request, h) => {
+        const uploadPath = path.join(__dirname, 'public', 'uploads', 'avatars');
+        if (!fs.existsSync(uploadPath)) {
+          return h.response({ error: 'Folder not found' }).code(404);
+        }
 
+        const files = fs.readdirSync(uploadPath);
+        return h.response({ files });
+      }
+    });
 
-    // ✅ Tambahkan CORS headers ke semua response
     server.ext('onPreResponse', (request, h) => {
       const response = request.response;
       const cookies = response.headers?.['set-cookie'] || response.output?.headers?.['set-cookie'];
-  console.log('🍪 Set-Cookie Headers:', cookies);
+      console.log('🍪 Set-Cookie Headers:', cookies);
+
       const corsHeaders = {
         'Access-Control-Allow-Origin': 'https://front-parent.vercel.app',
         'Access-Control-Allow-Credentials': 'true',
