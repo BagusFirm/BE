@@ -1,8 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { getDB } = require('../config/db');
 const supabase = getDB();
-const Path = require('path');
-const Inert = require('@hapi/inert');
 
 const AuthService = require('../services/auth.service');
 

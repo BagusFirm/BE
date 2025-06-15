@@ -2,7 +2,7 @@ require('dotenv').config();
 const Hapi = require('@hapi/hapi');
 const winston = require('./utils/logger');
 const { initDB } = require('./config/db');
-const Path = require('path');
+const path = require('path');
 const Inert = require('@hapi/inert');
 
 const forumRoutes = require('./routes/forum.routes');
