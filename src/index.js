@@ -24,6 +24,9 @@ const server = Hapi.server({
   routes: {
     cors: {
       credentials: true,
+    },
+    files: {
+      relativeTo: path.join(__dirname, 'public') // 💥 ini dia yang bikin static file bisa jalan!
     }
   }
 });
