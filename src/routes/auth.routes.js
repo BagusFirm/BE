@@ -44,7 +44,8 @@ module.exports = [
       output: 'stream',
       parse: true,
       allow: ['multipart/form-data'],
-      maxBytes: 1024 * 1024 * 3
+      multipart: true,
+      maxBytes: 3 * 1024 * 1024
     }
   },
   handler: AuthController.uploadAvatar

@@ -144,11 +144,12 @@ const uploadAvatar = async (request, h) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userId = decoded.id;
-    console.log('[UPLOAD AVATAR] Payload:', request.payload);
+    console.log('[DEBUG] Content-Type:', request.headers['content-type']);
+console.log('[DEBUG] Payload:', request.payload);
 
     const file = request.payload.avatar;
     if (!file || !file.hapi) return h.response({ message: 'File tidak valid' }).code(400);
-
+    const path = require('path');
     const ext = path.extname(file.hapi.filename);
     const mimeType = file.hapi.headers['content-type'];
     const filePath = `avatars/${userId}_${Date.now()}${ext}`;
@@ -159,7 +160,7 @@ const uploadAvatar = async (request, h) => {
     }
     const buffer = Buffer.concat(chunks);
 
-    const { error: uploadError } = await supabaseClient.storage
+    const { error: uploadError } = await supabase.storage
       .from('avatars')
       .upload(filePath, buffer, {
         contentType: mimeType,
@@ -171,7 +172,7 @@ const uploadAvatar = async (request, h) => {
       return h.response({ message: 'Gagal upload avatar' }).code(500);
     }
 
-    const { data: { publicUrl } } = supabaseClient
+    const { data: { publicUrl } } = supabase
       .storage
       .from('avatars')
       .getPublicUrl(filePath);
