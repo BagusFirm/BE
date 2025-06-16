@@ -7,8 +7,8 @@ import joblib
 
 def load_model_and_encoder():
     here = os.path.dirname(__file__)
-    model_path = os.path.normpath(os.path.join(here, '../../parenting_match_model.pkl'))
-    encoder_path = os.path.normpath(os.path.join(here, '../../label_parenting_match_model.pkl'))
+    model_path = os.path.normpath(os.path.join(here, 'parenting_match_model.pkl'))
+    encoder_path = os.path.normpath(os.path.join(here, 'label_parenting_match_model.pkl'))
 
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
