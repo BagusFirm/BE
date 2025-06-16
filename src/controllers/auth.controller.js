@@ -89,11 +89,18 @@ const forgotPassword = async (request, h) => {
 
 const logout = async (request, h) => {
   console.log('[LOGOUT] Clearing token');
+
   return h
     .response({ message: 'Logout berhasil' })
-    .unstate('token')
+    .unstate('token', {
+      path: '/', 
+      isHttpOnly: true,
+      isSecure: true,
+      isSameSite: 'None',
+    }) // ❗ lengkapkan opsi agar sesuai dengan saat login
     .code(200);
 };
+
 
 const updateProfile = async (request, h) => {
   try {
