@@ -102,7 +102,7 @@ console.log('[DEBUG] Token dari client:', `"${token}"`);
     .select('*')
     .eq('token', token)
     .single();
-console.log('[DEBUG] Hasil query:', record);
+console.log('[DEBUG] Hasil query:', resetRecord);
 console.log('[DEBUG] Error query:', error);
   if (!resetRecord || new Date(resetRecord.expired_at) < new Date()) {
     return h.response({ message: 'Token tidak valid atau sudah kedaluwarsa' }).code(400);
