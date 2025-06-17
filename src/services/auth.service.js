@@ -96,17 +96,25 @@ console.log('🔥 Cookie Setting:', {
 
 const resetPassword = async (payload, h) => {
   const { token, password } = payload;
-console.log('[DEBUG] Token dari client:', `"${token}"`);
+
+  console.log('[RESET PASSWORD] Payload:', payload);
+
   const { data: resetRecord, error } = await supabase
     .from('password_resets')
     .select('*')
     .eq('token', token)
     .single();
-console.log('[DEBUG] Hasil query:', resetRecord);
-console.log('[DEBUG] Error query:', error);
+
+  console.log('[DEBUG] Hasil query:', resetRecord);
+  console.log('[DEBUG] Error query:', error);
+  console.log('[DEBUG] Now:', new Date());
+  console.log('[DEBUG] Token expired_at:', new Date(resetRecord?.expired_at));
+  console.log('[DEBUG] Is expired:', new Date(resetRecord?.expired_at) < new Date());
+
   if (!resetRecord || new Date(resetRecord.expired_at) < new Date()) {
     return h.response({ message: 'Token tidak valid atau sudah kedaluwarsa' }).code(400);
   }
+
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const { error: updateError } = await supabase
@@ -118,7 +126,6 @@ console.log('[DEBUG] Error query:', error);
     return h.response({ message: 'Gagal mengubah password' }).code(500);
   }
 
-  // Hapus token setelah berhasil
   await supabase
     .from('password_resets')
     .delete()
@@ -126,6 +133,7 @@ console.log('[DEBUG] Error query:', error);
 
   return h.response({ message: 'Password berhasil direset' }).code(200);
 };
+
 
 
 const forgotPassword = async (payload, h) => {
