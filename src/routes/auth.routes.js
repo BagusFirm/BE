@@ -60,6 +60,11 @@ module.exports = [
     handler: AuthController.login
   },
   {
+  method: 'POST',
+  path: '/api/auth/reset-password',
+  handler: AuthController.resetPassword
+},
+  {
     method: 'POST',
     path: '/api/auth/forgot-password',
     handler: AuthController.forgotPassword

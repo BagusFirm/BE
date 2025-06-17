@@ -194,6 +194,11 @@ const uploadAvatar = async (request, h) => {
     return h.response({ message: 'Terjadi kesalahan saat upload avatar' }).code(500);
   }
 };
+const resetPassword = async (request, h) => {
+  const payload = request.payload;
+  console.log('[RESET PASSWORD] Payload:', payload);
+  return AuthService.resetPassword(payload, h);
+};
 
 module.exports = {
   register,
@@ -203,5 +208,6 @@ module.exports = {
   checkAuth,
   getCurrentUser,
   updateProfile,
-  uploadAvatar
+  uploadAvatar,
+  resetPassword
 };

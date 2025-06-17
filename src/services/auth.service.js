@@ -94,6 +94,40 @@ console.log('🔥 Cookie Setting:', {
   }
 };
 
+const resetPassword = async (payload, h) => {
+  const { token, password } = payload;
+
+  const { data: resetRecord, error } = await supabase
+    .from('password_resets')
+    .select('*')
+    .eq('token', token)
+    .single();
+
+  if (!resetRecord || new Date(resetRecord.expired_at) < new Date()) {
+    return h.response({ message: 'Token tidak valid atau sudah kedaluwarsa' }).code(400);
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const { error: updateError } = await supabase
+    .from('users')
+    .update({ password: hashedPassword })
+    .eq('id', resetRecord.user_id);
+
+  if (updateError) {
+    return h.response({ message: 'Gagal mengubah password' }).code(500);
+  }
+
+  // Hapus token setelah berhasil
+  await supabase
+    .from('password_resets')
+    .delete()
+    .eq('id', resetRecord.id);
+
+  return h.response({ message: 'Password berhasil direset' }).code(200);
+};
+
+
 const forgotPassword = async (payload, h) => {
   const { email } = payload;
 
@@ -159,4 +193,4 @@ const forgotPassword = async (payload, h) => {
 };
 
 
-module.exports = { register, login, forgotPassword };
+module.exports = { register, login, forgotPassword, resetPassword };
