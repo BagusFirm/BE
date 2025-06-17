@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { getDB } = require('../config/db');
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 
 const supabase = getDB();
 
@@ -95,9 +97,10 @@ console.log('🔥 Cookie Setting:', {
 const forgotPassword = async (payload, h) => {
   const { email } = payload;
 
-  const { data: user } = await supabase
+  // Cari user berdasarkan email
+  const { data: user, error } = await supabase
     .from('users')
-    .select('*')
+    .select('id, email')
     .eq('email', email)
     .single();
 
@@ -105,10 +108,54 @@ const forgotPassword = async (payload, h) => {
     return h.response({ message: 'Email tidak ditemukan' }).code(404);
   }
 
-  const token = Math.random().toString(36).slice(2);
-  console.log(`Link reset (simulasi): https://yourdomain.com/reset-password/${token}`);
+  // Generate token & expiry 1 jam
+  const token = crypto.randomBytes(32).toString('hex');
+  const expiredAt = new Date(Date.now() + 3600 * 1000); // 1 jam dari sekarang
 
-  return h.response({ message: 'Link reset dikirim (simulasi)' }).code(200);
+  // Simpan ke tabel password_resets
+  const { error: insertError } = await supabase
+    .from('password_resets')
+    .insert([{ user_id: user.id, token, expired_at: expiredAt }]);
+
+  if (insertError) {
+    console.error('Gagal menyimpan token reset:', insertError.message);
+    return h.response({ message: 'Gagal membuat token reset' }).code(500);
+  }
+
+  // Kirim email
+  const resetLink = `${process.env.BASE_FRONTEND_URL}/reset-password/${token}`;
+
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.MAIL_USER,
+      pass: process.env.MAIL_PASS,
+    },
+  });
+
+  const mailOptions = {
+    from: `"ParentCare" <${process.env.MAIL_USER}>`,
+    to: user.email,
+    subject: 'Reset Password ParentCare',
+    html: `
+      <p>Halo 👋</p>
+      <p>Kami menerima permintaan untuk reset password akun ParentCare kamu.</p>
+      <p>Silakan klik tombol di bawah ini untuk mengganti password:</p>
+      <p><a href="${resetLink}" style="display:inline-block;padding:12px 20px;background-color:#FFBFA3;color:white;text-decoration:none;border-radius:6px;">Reset Password</a></p>
+      <p>Link ini akan kadaluarsa dalam 1 jam.</p>
+      <p>Abaikan jika kamu tidak merasa melakukan permintaan ini.</p>
+      <p><strong>Salam hangat,<br>Tim ParentCare</strong></p>
+    `,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    return h.response({ message: 'Link reset telah dikirim ke email Anda' }).code(200);
+  } catch (err) {
+    console.error('Gagal mengirim email:', err.message);
+    return h.response({ message: 'Gagal mengirim email reset' }).code(500);
+  }
 };
+
 
 module.exports = { register, login, forgotPassword };
