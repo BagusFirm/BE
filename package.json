@@ -19,6 +19,7 @@
   "dependencies": {
     "@hapi/hapi": "^21.3.1",
     "@hapi/inert": "^7.1.0",
+    "@react-oauth/google": "^0.12.2",
     "@supabase/supabase-js": "^2.39.5",
     "axios": "^1.6.8",
     "bcryptjs": "^3.0.2",

@@ -4,6 +4,9 @@ const { getDB } = require('../config/db');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
 const supabase = getDB();
 
 const register = async (payload, h) => {
@@ -153,7 +156,7 @@ const forgotPassword = async (payload, h) => {
   // Generate token & expiry 1 jam
   const token = crypto.randomBytes(32).toString('hex');
 const expiredAt = new Date(Date.now() + 3600 * 1000).toISOString(); // ✅
-
+ 
 
 
   // Simpan ke tabel password_resets
@@ -202,5 +205,71 @@ const expiredAt = new Date(Date.now() + 3600 * 1000).toISOString(); // ✅
   }
 };
 
+const googleLogin = async ({ credential }, h) => {
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
 
-module.exports = { register, login, forgotPassword, resetPassword };
+    const payload = ticket.getPayload();
+    const { email, name, picture } = payload;
+
+    const { data: existingUser } = await supabase
+      .from('users')
+      .select('*')
+      .eq('email', email)
+      .single();
+
+    let user = existingUser;
+
+    // Kalau belum ada user, insert baru
+    if (!user) {
+      const { data: newUser, error } = await supabase
+        .from('users')
+        .insert([
+          {
+            email,
+            nama_lengkap: name,
+            avatar: picture,
+            is_google: true,
+          },
+        ])
+        .select()
+        .single();
+
+      if (error) throw error;
+      user = newUser;
+    }
+
+    // Bikin JWT
+    const token = jwt.sign(
+      { id: user.id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    return h
+      .response({
+        message: 'Login Google berhasil',
+        user,
+        token,
+      })
+      .state('token', token, {
+        ttl: 3600000,
+        isHttpOnly: true,
+        isSecure: true,
+        isSameSite: 'None',
+        path: '/',
+      })
+      .code(200);
+  } catch (err) {
+    console.error('[GOOGLE LOGIN ERROR]', err);
+    return h.response({ message: 'Gagal login dengan Google' }).code(401);
+  }
+};
+
+
+
+
+module.exports = { register, login, forgotPassword, resetPassword, googleLogin};
