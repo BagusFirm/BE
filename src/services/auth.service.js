@@ -123,7 +123,8 @@ const forgotPassword = async (payload, h) => {
   }
 
   // Kirim email
-  const resetLink = `${process.env.BASE_FRONTEND_URL}/reset-password/${token}`;
+  const resetLink = `${process.env.BASE_FRONTEND_URL}/auth/reset-password/${token}`;
+
 
   const transporter = nodemailer.createTransport({
     service: 'gmail',
