@@ -102,6 +102,7 @@ const resetPassword = async (payload, h) => {
     .select('*')
     .eq('token', token)
     .single();
+  console.log('[RESET PASSWORD] Token dari client:', token);
 
   if (!resetRecord || new Date(resetRecord.expired_at) < new Date()) {
     return h.response({ message: 'Token tidak valid atau sudah kedaluwarsa' }).code(400);
