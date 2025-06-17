@@ -55,11 +55,6 @@ module.exports = [
     handler: AuthController.register
   },
   {
-  method: 'POST',
-  path: '/api/auth/google-login',
-  handler: AuthController.googleLogin,
-},
-  {
     method: 'POST',
     path: '/api/auth/login',
     handler: AuthController.login

@@ -199,10 +199,7 @@ const resetPassword = async (request, h) => {
   console.log('[RESET PASSWORD] Payload:', payload);
   return AuthService.resetPassword(payload, h);
 };
-const googleLogin = async (request, h) => {
-  const payload = request.payload;
-  return AuthService.googleLogin(payload, h);
-};
+
 
 module.exports = {
   register,
@@ -213,6 +210,5 @@ module.exports = {
   getCurrentUser,
   updateProfile,
   uploadAvatar,
-  resetPassword,
-  googleLogin
+  resetPassword
 };
