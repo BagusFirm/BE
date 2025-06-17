@@ -152,7 +152,8 @@ const forgotPassword = async (payload, h) => {
 
   // Generate token & expiry 1 jam
   const token = crypto.randomBytes(32).toString('hex');
-  const expiredAt = new Date(Date.now() + 3600 * 1000); // 1 jam dari sekarang
+const expiredAt = new Date(Date.now() + 6 * 60 * 60 * 1000).toISOString();
+
 
   // Simpan ke tabel password_resets
   const { error: insertError } = await supabase
